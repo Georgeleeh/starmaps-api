@@ -1,0 +1,7 @@
+__*/
+venv/
+Etsy/
+app/static/map_pngs
+app/database.sqlite3
+.env
+.DS_Store
