@@ -1,0 +1,259 @@
+{% extends "base.html" %} {% block head %}
+<script
+  type="text/javascript"
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXhf2GzZIQQ4eOIS1UkZ033CRX_NRWO0Q&libraries=places"
+></script>
+{% endblock %} {% block content %}
+<div class="w-75 mx-auto form-horizontal d-grid gap-3">
+  <h2>Thank you for submitting!</h2>
+</br>
+  <p>
+    We've received your form and will start making your poster ASAP. Below is
+    the form you submitted.
+  </p>
+  </br>
+</div>
+<form
+  action="{% block form_action %}{{ url_for('starmap_form', poster_id=poster_id) }}{% endblock %}"
+  class="w-75 mx-auto form-horizontal d-grid gap-3"
+  method="post"
+>
+  <div class="card form-group">
+    <h5 class="card-header">Map Date and Time</h5>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item card-text">
+        <p>The date of stars you'd like to see.</p>
+      </li>
+      <li class="list-group-item card-body">
+        <input
+          class="form-control"
+          id="map_date"
+          name="map_date"
+          type="date"
+          value="{{ request.form.get('map_datetime', response.map_datetime) | format_datetime('date') }}"
+          disabled
+        />
+        <input
+          class="form-control"
+          id="map_time"
+          name="map_time"
+          type="time"
+          value="{{ request.form.get('map_datetime', response.map_datetime) | format_datetime('time') }}"
+          disabled
+        />
+      </li>
+    </ul>
+  </div>
+
+  <div class="card form-group">
+    <h5 class="card-header">Written Map Date and Time</h5>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item card-text">
+        <p>
+          This is how you'd like the date and time to be written on the poster.
+          You can write just the date if you like, or both, in any format. We'll
+          write exactly what you put here at the bottom of the poster, below the
+          location.
+        </p>
+      </li>
+      <li class="list-group-item card-body">
+        <input class="form-control" id="map_written_datetime"
+        name="map_written_datetime" type="text" {% if
+        request.form.get('map_written_datetime', response.map_written_datetime)
+        !=None %} value="{{ request.form.get('map_written_datetime',
+        response.map_written_datetime) }}" {% endif %} disabled>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card form-group">
+    <h5 class="card-header">Latitude</h5>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item card-text">
+        <p>The latitude of the location you entered before.</p>
+      </li>
+      <li class="list-group-item card-body">
+        <div class="input-group">
+          <input class="form-control" id="lat" name="latitude" type="text" {% if
+          request.form.get('latitude', response.latitude) !=None %} value="{{
+          request.form.get('latitude', response.latitude) }}" {% endif %}
+          disabled />
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card form-group">
+    <h5 class="card-header">Longitude</h5>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item card-text">
+        <p>The longitude of the location you entered before.</p>
+      </li>
+      <li class="list-group-item card-body">
+        <div class="input-group">
+          <input class="form-control" id="lat" name="longitude" type="text" {%
+          if request.form.get('longitude', response.longitude) !=None %}
+          value="{{ request.form.get('longitude', response.longitude) }}" {%
+          endif %} disabled />
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card form-group">
+    <h5 class="card-header">Written Map Location</h5>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item card-text">
+        <p>
+          This is how you'd like the location to be written on the poster. You
+          can write it just like above or leave out details like house numbers
+          and postcodes to make it neater. We'll write exactly what you put here
+          at the bottom of the poster, just above the date and time.
+        </p>
+      </li>
+      <li class="list-group-item card-body">
+        <input class="form-control" id="map_written_location"
+        name="map_written_location" type="text" {% if
+        request.form.get('map_written_address', response.map_written_address)
+        !=None %} value="{{ request.form.get('map_written_address',
+        response.map_written_address) }}" {% endif %} disabled>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card form-group">
+    <h5 class="card-header">Message</h5>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item card-text">
+        <p>
+          No need to write the location and date here, just the personal message
+          you'd like added. If you leave this blank, the date and location will
+          still be added. Please do not add tabs/spaces to align the text, we
+          will center-align it for you.
+        </p>
+      </li>
+      <li class="list-group-item card-body">
+        <textarea
+          class="form-control"
+          id="message"
+          name="message"
+          rows="3"
+          disabled
+        >
+{% if
+                            request.form.get('map_message', response.message) != None %}{{ request.form.get('message', response.message) }}{% endif %} </textarea
+        >
+      </li>
+    </ul>
+  </div>
+
+  <div class="card form-group">
+    <h5 class="card-header">Colour Scheme</h5>
+    <div class="card-body">
+      <div class="form-check">
+        <input class="form-check-input" type="radio" id="colour_scheme1"
+        name="colour_scheme" value="White" {% if request.form.get('colour',
+        response.colour)=='White' or request.form.get('colour',
+        response.colour)==None %} checked {% endif %} disabled>
+        <label class="form-check-label" for="colour_scheme1"> White </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" id="colour_scheme2"
+        name="colour_scheme" value="Black" {% if request.form.get('colour',
+        response.colour)=='Black' %} checked {% endif %} disabled>
+        <label class="form-check-label" for="colour_scheme2"> Black </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" id="colour_scheme3"
+        name="colour_scheme" value="Navy" {% if request.form.get('colour',
+        response.colour)=='Navy' %} checked {% endif %} disabled>
+        <label class="form-check-label" for="colour_scheme3"> Navy </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" id="colour_scheme4"
+        name="colour_scheme" value="Grey-Blue" {% if request.form.get('colour',
+        response.colour)=='Grey-Blue' %} checked {% endif %} disabled>
+        <label class="form-check-label" for="colour_scheme4"> Grey-Blue </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" id="colour_scheme5"
+        name="colour_scheme" value="Teal" {% if request.form.get('colour',
+        response.colour)=='Teal' %} checked {% endif %} disabled>
+        <label class="form-check-label" for="colour_scheme5"> Teal </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="card form-group">
+    <h5 class="card-header">Font</h5>
+    <div class="card-body">
+      <div class="form-check">
+        <input class="form-check-input" type="radio" id="font1" name="font"
+        value="Avenir" {% if request.form.get('font', response.font)=='Avenir'
+        or request.form.get('font', response.font)==None %} checked {% endif %}
+        disabled>
+        <label class="form-check-label" for="font1"> Avenir </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" id="font2" name="font"
+        value="Big Caslon" {% if request.form.get('font', response.font)=='Big Caslon' %} checked {% endif %} disabled>
+        <label class="form-check-label" for="font2"> Big Caslon </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" id="font3" name="font"
+        value="Amatic SC" {% if request.form.get('font', response.font)=='Amatic SC' %} checked {% endif %} disabled>
+        <label class="form-check-label" for="font3"> Amatic SC </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" id="font4" name="font"
+        value="Lucida Calligraphy" {% if request.form.get('font',
+        response.font)=='Lucida Calligraphy' %} checked {% endif %} disabled>
+        <label class="form-check-label" for="font4"> Lucida Calligraphy </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" id="font5" name="font"
+        value="Snell Roundhand" {% if request.form.get('font',
+        response.font)=='Snell Roundhand' %} checked {% endif %} disabled>
+        <label class="form-check-label" for="font5"> Snell Roundhand </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="card form-group">
+    <h5 class="card-header">Poster Size</h5>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item card-text">
+        <p>
+          This sets what sizes can be used for printing.
+        </p>
+      </li>
+      <li class="list-group-item card-body">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="image_scale1"
+          name="image_scale" value="8x10" {% if request.form.get('image_scale',
+          response.image_scale)=='8x10' or request.form.get('image_scale',
+          response.image_scale)==None %} checked {% endif %} disabled>
+          <label class="form-check-label" for="image_scale1">
+            8x10 scaled (for 8"x10", 16"x20" or other)
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="image_scale2"
+          name="image_scale" value="Alpha" {% if request.form.get('image_scale',
+          response.image_scale)=='Alpha' %} checked {% endif %} disabled>
+          <label class="form-check-label" for="image_scale2">
+            Alpha scaled (for A2, A3, A4, or other)
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="image_scale3"
+          name="image_scale" value="Square" {% if
+          request.form.get('image_scale', response.image_scale)=='Square' %}
+          checked {% endif %} disabled>
+          <label class="form-check-label" for="image_scale3"> Square </label>
+        </div>
+      </li>
+    </ul>
+  </div>
+</form>
+{% endblock %}
