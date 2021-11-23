@@ -105,11 +105,6 @@ class Poster(db.Model):
         # first half of the sku code in lower case
         # skus look like this: MAPTYPE-SIZE
         return self.sku.split('-')[0].lower()
-    
-    @property
-    def is_digital(self):
-        # digital posters are defined by a size of D in the sku
-        return self.sku.split('-')[-1] == 'D'
 
     def __repr__(self):
         return f'<Poster {self.id}>'
