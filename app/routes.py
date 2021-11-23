@@ -317,6 +317,27 @@ def poster_approved(poster_id):
         db.session.commit()
         return {'success' : 'Poster marked approved'}, 200
 
+@app.route('/poster/<poster_id>/mark_sent', methods=['PATCH'])
+def poster_sent(poster_id):
+    # Mark specified Poster as approved
+    if request.method == 'PATCH':
+        p = Poster.query.filter_by(id=poster_id).first()
+        t = Transaction.query.filter_by(id=p.transaction_id).first()
+        p.sent = True
+
+        message = ''
+
+        if t.is_digital:
+            posters_sent = [p.sent for p in t.posters]
+            if all(posters_sent):
+                t.shipped = True
+                e = Etsy()
+                e.mark_complete(t.receipt_id)
+                message = ' and order is complete'
+
+        db.session.commit()
+        return {'success' : 'Poster marked sent' + message}, 200
+
 @app.route('/poster/<poster_id>/request_edit', methods=['PATCH'])
 def poster_request_edit(poster_id):
     # Return Response for specified Poster as dict
