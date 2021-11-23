@@ -116,8 +116,7 @@
       </li>
       <li class="list-group-item card-body">
         <textarea class="form-control" id="message" name="message" rows="3">
-{% if
-                            request.form.get('map_message', response.message) != None %}{{ request.form.get('message', response.message) }}{% endif %}</textarea
+{% if request.form.get('map_message', response.message) != None %}{{ request.form.get('message', response.message) }}{% endif %}</textarea
         >
       </li>
     </ul>
@@ -163,36 +162,56 @@
   <div class="card form-group">
     <h5 class="card-header">Font</h5>
     <div class="card-body">
-      <div class="form-check">
-        <input class="form-check-input" type="radio" id="font1" name="font"
-        value="Avenir" {% if request.form.get('font', response.font)=='Avenir'
-        or request.form.get('font', response.font)==None %} checked {% endif %}>
-        <label class="form-check-label" for="font1"> Avenir </label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" id="font2" name="font"
-        value="Big Caslon" {% if request.form.get('font', response.font)=='Big
-        Caslon' %} checked {% endif %}>
-        <label class="form-check-label" for="font2"> Big Caslon </label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" id="font3" name="font"
-        value="Amatic SC" {% if request.form.get('font', response.font)=='Amatic
-        SC' %} checked {% endif %}>
-        <label class="form-check-label" for="font3"> Amatic SC </label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" id="font4" name="font"
-        value="Lucida Calligraphy" {% if request.form.get('font',
-        response.font)=='Lucida Calligraphy' %} checked {% endif %}>
-        <label class="form-check-label" for="font4"> Lucida Calligraphy </label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" id="font5" name="font"
-        value="Snell Roundhand" {% if request.form.get('font',
-        response.font)=='Snell Roundhand' %} checked {% endif %}>
-        <label class="form-check-label" for="font5"> Snell Roundhand </label>
-      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="font1"
+              name="font" value="Avenir" {% if request.form.get('font',
+              response.font)=='Avenir' or request.form.get('font',
+              response.font)==None %} checked {% endif %}>
+              <label class="form-check-label" for="font1"> Avenir </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="font2"
+              name="font" value="Big Caslon" {% if request.form.get('font',
+              response.font)=='Big Caslon' %} checked {% endif %}>
+              <label class="form-check-label" for="font2"> Big Caslon </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="font3"
+              name="font" value="Amatic SC" {% if request.form.get('font',
+              response.font)=='Amatic SC' %} checked {% endif %}>
+              <label class="form-check-label" for="font3"> Amatic SC </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="font4"
+              name="font" value="Lucida Calligraphy" {% if
+              request.form.get('font', response.font)=='Lucida Calligraphy' %}
+              checked {% endif %}>
+              <label class="form-check-label" for="font4">
+                Lucida Calligraphy
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="font5"
+              name="font" value="Snell Roundhand" {% if request.form.get('font',
+              response.font)=='Snell Roundhand' %} checked {% endif %}>
+              <label class="form-check-label" for="font5">
+                Snell Roundhand
+              </label>
+            </div>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div>
+            <img
+              src="{{ url_for('static', filename = 'images/fonts.png') }}"
+              style="max-height: 500px"
+            />
+          </div>
+        </li>
+      </ul>
     </div>
   </div>
 
