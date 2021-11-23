@@ -82,7 +82,7 @@ def get_poster_size(transaction_id):
 
 # ---------------------------------- FORMS ---------------------------------- #
 
-@app.route('/digiform/<poster_id>', methods=['GET', 'POST'])
+@app.route('/form/<poster_id>', methods=['GET', 'POST'])
 def starmap_form(poster_id):
     p = Poster.query.filter_by(id=poster_id).first()
     if request.method == 'GET':
