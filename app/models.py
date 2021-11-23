@@ -137,7 +137,6 @@ class Response(db.Model):
     map_datetime = db.Column(db.DateTime, unique=False, nullable=False)
     map_written_datetime = db.Column(db.String(40), unique=False, nullable=True)
     message = db.Column(db.Text, unique=False, nullable=False)
-    map_address = db.Column(db.Text, unique=False, nullable=True) # To be phased out
     map_written_address = db.Column(db.Text, unique=False, nullable=False)
     size = db.Column(db.String(20), unique=False, nullable=True) # This could be from the form for a digital poster or from the variations for a phyisical poster
     latitude = db.Column(db.Float, unique=False, nullable=True)
@@ -162,7 +161,6 @@ class Response(db.Model):
             'map_datetime': self.map_datetime.timestamp(),
             'map_written_datetime': self.map_written_datetime,
             'message': self.message,
-            'map_address': self.map_address,
             'map_written_address': self.map_written_address,
             'size': self.size,
             'latitude': self.latitude,
