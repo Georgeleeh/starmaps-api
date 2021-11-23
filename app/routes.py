@@ -1,6 +1,6 @@
 from app import app
 from app.models import *
-from flask import jsonify, request
+from flask import jsonify, request, render_template
 from datetime import datetime
 from Etsy import Etsy
 import sqlalchemy
@@ -75,8 +75,64 @@ def sendemail(receiver_email, subject, text):
     finally:
         server.quit()
 
-def sku_to_size(sku):
-    pass
+def get_poster_size(transaction_id):
+    t = Transaction.query.filter_by(id=transaction_id).first()
+    return t.poster_scale
+
+
+# ---------------------------------- FORMS ---------------------------------- #
+
+@app.route('/digiform/<poster_id>', methods=['GET', 'POST'])
+def starmap_form(poster_id):
+    p = Poster.query.filter_by(id=poster_id).first()
+    if request.method == 'GET':
+        t = Transaction.query.filter_by(id=p.transaction_id).first()
+
+        if t.is_digital:
+            if not p.sent:
+                return render_template('digital_starmap_form.html', response=Response(), poster_id=poster_id)
+            else:
+                return render_template('disabled_digital_starmap_form.html', response=p.response, poster_id=poster_id)
+        else:
+            if not p.sent:
+                return render_template('physical_starmap_form.html', response=Response(), poster_id=poster_id)
+            else:
+                return render_template('disabled_physical_starmap_form.html', response=p.response, poster_id=poster_id)
+
+        # TODO add sorry no edits page for sent posters
+        
+    elif request.method == 'POST':
+        button_value = request.form.get('button')
+        if button_value == 'save':
+            response_datetime = str(request.form.get('map_date')) + ' ' + str(request.form.get('map_time'))
+            r = Response(
+                timestamp = datetime.now(),
+                # All Responses
+                map_datetime = datetime.strptime(response_datetime, "%Y-%m-%d %H:%M"),
+                map_written_datetime = request.form.get('map_written_datetime'),
+                message = request.form.get('message'),
+                map_written_address = request.form.get('map_written_location'),
+                size = request.form.get('image_scale') or get_poster_size(p.transaction_id),
+                latitude = request.form.get('lat'),
+                longitude = request.form.get('long'),
+                # Starmap Only
+                colour = request.form.get('colour_scheme'),
+                font = request.form.get('font'),
+                # Watercolour Only
+                show_conlines = request.form.get('show_conlines'),
+                map_background = request.form.get('map_background'),
+                # Relationships
+                poster_id = poster_id
+                )
+
+            # Add Response to Poster and commit to db
+            p.response = r
+            p.responded = True
+            db.session.add(p)
+            db.session.add(r)
+            db.session.commit()
+            return render_template('disabled_digital_starmap_form.html', response=r, poster_id=poster_id)
+            # TODO email copy of form to user
 
 
 # ---------------------------------- BUYER ---------------------------------- #
@@ -206,7 +262,6 @@ def poster_response(poster_id):
                 map_datetime = datetime.fromtimestamp(response_data['map_datetime']),
                 map_written_datetime = response_data['map_written_datetime'],
                 message = response_data['message'],
-                map_address = response_data['map_address'],
                 map_written_address = response_data['map_written_address'],
                 size = response_data['size'],
                 latitude = response_data['latitude'],
