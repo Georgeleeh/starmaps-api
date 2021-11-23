@@ -14,8 +14,8 @@ db = SQLAlchemy(app)
 from app import routes
 
 @app.template_filter()
-def format_datetime(value, format='full'):
-    if value is None:
+def format_datetime(dt, format='full'):
+    if dt is None:
         return None
         
     if format == 'full':
@@ -24,4 +24,4 @@ def format_datetime(value, format='full'):
         format="%Y-%m-%d"
     elif format == 'time':
         format="%H:%M"
-    return datetime.fromtimestamp(value).strftime(format)
+    return dt.strftime(format)
