@@ -5,7 +5,7 @@
 ></script>
 {% endblock %} {% block content %}
 <form
-  action="{% block form_action %}{{ url_for('digital_starmap_form', poster_id=poster_id) }}{% endblock %}"
+  action="{% block form_action %}{{ url_for('starmap_form', poster_id=poster_id) }}{% endblock %}"
   class="w-75 mx-auto form-horizontal d-grid gap-3"
   method="post"
 >
@@ -128,33 +128,33 @@
     <div class="card-body">
       <div class="form-check">
         <input class="form-check-input" type="radio" id="colour_scheme1"
-        name="colour_scheme" value="white" {% if request.form.get('colour',
-        response.colour)=='white' or request.form.get('colour',
+        name="colour_scheme" value="White" {% if request.form.get('colour',
+        response.colour)=='White' or request.form.get('colour',
         response.colour)==None %} checked {% endif %}>
         <label class="form-check-label" for="colour_scheme1"> White </label>
       </div>
       <div class="form-check">
         <input class="form-check-input" type="radio" id="colour_scheme2"
-        name="colour_scheme" value="black" {% if request.form.get('colour',
-        response.colour)=='black' %} checked {% endif %}>
+        name="colour_scheme" value="Black" {% if request.form.get('colour',
+        response.colour)=='Black' %} checked {% endif %}>
         <label class="form-check-label" for="colour_scheme2"> Black </label>
       </div>
       <div class="form-check">
         <input class="form-check-input" type="radio" id="colour_scheme3"
-        name="colour_scheme" value="navy" {% if request.form.get('colour',
-        response.colour)=='navy' %} checked {% endif %}>
+        name="colour_scheme" value="Navy" {% if request.form.get('colour',
+        response.colour)=='Navy' %} checked {% endif %}>
         <label class="form-check-label" for="colour_scheme3"> Navy </label>
       </div>
       <div class="form-check">
         <input class="form-check-input" type="radio" id="colour_scheme4"
-        name="colour_scheme" value="grey-blue" {% if request.form.get('colour',
-        response.colour)=='grey-blue' %} checked {% endif %}>
+        name="colour_scheme" value="Grey-Blue" {% if request.form.get('colour',
+        response.colour)=='Grey-Blue' %} checked {% endif %}>
         <label class="form-check-label" for="colour_scheme4"> Grey-Blue </label>
       </div>
       <div class="form-check">
         <input class="form-check-input" type="radio" id="colour_scheme5"
-        name="colour_scheme" value="teal" {% if request.form.get('colour',
-        response.colour)=='teal' %} checked {% endif %}>
+        name="colour_scheme" value="Teal" {% if request.form.get('colour',
+        response.colour)=='Teal' %} checked {% endif %}>
         <label class="form-check-label" for="colour_scheme5"> Teal </label>
       </div>
     </div>
@@ -165,46 +165,42 @@
     <div class="card-body">
       <div class="form-check">
         <input class="form-check-input" type="radio" id="font1" name="font"
-        value="avenir" {% if request.form.get('font', response.font)=='avenir'
+        value="Avenir" {% if request.form.get('font', response.font)=='Avenir'
         or request.form.get('font', response.font)==None %} checked {% endif %}>
         <label class="form-check-label" for="font1"> Avenir </label>
       </div>
       <div class="form-check">
         <input class="form-check-input" type="radio" id="font2" name="font"
-        value="big caslon" {% if request.form.get('font', response.font)=='big
-        caslon' %} checked {% endif %}>
+        value="Big Caslon" {% if request.form.get('font', response.font)=='Big
+        Caslon' %} checked {% endif %}>
         <label class="form-check-label" for="font2"> Big Caslon </label>
       </div>
       <div class="form-check">
         <input class="form-check-input" type="radio" id="font3" name="font"
-        value="amatic sc" {% if request.form.get('font', response.font)=='amatic
-        sc' %} checked {% endif %}>
+        value="Amatic SC" {% if request.form.get('font', response.font)=='Amatic
+        SC' %} checked {% endif %}>
         <label class="form-check-label" for="font3"> Amatic SC </label>
       </div>
       <div class="form-check">
         <input class="form-check-input" type="radio" id="font4" name="font"
-        value="lucida calligraphy" {% if request.form.get('font',
-        response.font)=='lucida calligraphy' %} checked {% endif %}>
+        value="Lucida Calligraphy" {% if request.form.get('font',
+        response.font)=='Lucida Calligraphy' %} checked {% endif %}>
         <label class="form-check-label" for="font4"> Lucida Calligraphy </label>
       </div>
       <div class="form-check">
         <input class="form-check-input" type="radio" id="font5" name="font"
-        value="snell roundhand" {% if request.form.get('font',
-        response.font)=='snell roundhand' %} checked {% endif %}>
+        value="Snell Roundhand" {% if request.form.get('font',
+        response.font)=='Snell Roundhand' %} checked {% endif %}>
         <label class="form-check-label" for="font5"> Snell Roundhand </label>
       </div>
     </div>
   </div>
 
   <div class="card form-group">
-    <h5 class="card-header">Poster Scale</h5>
+    <h5 class="card-header">Poster Size</h5>
     <ul class="list-group list-group-flush">
       <li class="list-group-item card-text">
-        <p>
-          This sets what sizes can be used for printing. Alpha Scaled images can
-          not be printed as 8x10" and vise versa as Alpha Scaled images are
-          taller and skinnier. Alpha scaled corresponds to European paper sizes.
-        </p>
+        <p>The size you'd like to print your poster.</p>
       </li>
       <li class="list-group-item card-body">
         <div class="form-check">
@@ -212,24 +208,46 @@
           name="image_scale" value="8x10" {% if request.form.get('image_scale',
           response.image_scale)=='8x10' or request.form.get('image_scale',
           response.image_scale)==None %} checked {% endif %}>
-          <label class="form-check-label" for="image_scale1">
-            8x10 scaled (for 8"x10", 16"x20" or other)
-          </label>
+          <label class="form-check-label" for="image_scale1"> 8 x 10" </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="image_scale1"
+          name="image_scale" value="8x10" {% if request.form.get('image_scale',
+          response.image_scale)=='8x10' or request.form.get('image_scale',
+          response.image_scale)==None %} checked {% endif %}>
+          <label class="form-check-label" for="image_scale2"> 16 x 20" </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="image_scale1"
+          name="image_scale" value="8x10" {% if request.form.get('image_scale',
+          response.image_scale)=='8x10' or request.form.get('image_scale',
+          response.image_scale)==None %} checked {% endif %}>
+          <label class="form-check-label" for="image_scale3"> 24 x 30" </label>
         </div>
         <div class="form-check">
           <input class="form-check-input" type="radio" id="image_scale2"
           name="image_scale" value="Alpha" {% if request.form.get('image_scale',
           response.image_scale)=='Alpha' %} checked {% endif %}>
-          <label class="form-check-label" for="image_scale2">
-            Alpha scaled (for A2, A3, A4, or other)
-          </label>
+          <label class="form-check-label" for="image_scale4"> A4 </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="image_scale2"
+          name="image_scale" value="Alpha" {% if request.form.get('image_scale',
+          response.image_scale)=='Alpha' %} checked {% endif %}>
+          <label class="form-check-label" for="image_scale5"> A3 </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="image_scale2"
+          name="image_scale" value="Alpha" {% if request.form.get('image_scale',
+          response.image_scale)=='Alpha' %} checked {% endif %}>
+          <label class="form-check-label" for="image_scale6"> A2 </label>
         </div>
         <div class="form-check">
           <input class="form-check-input" type="radio" id="image_scale3"
           name="image_scale" value="Square" {% if
           request.form.get('image_scale', response.image_scale)=='Square' %}
           checked {% endif %}>
-          <label class="form-check-label" for="image_scale3"> Square </label>
+          <label class="form-check-label" for="image_scale7"> Square </label>
         </div>
       </li>
     </ul>
