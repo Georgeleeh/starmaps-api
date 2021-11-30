@@ -18,6 +18,10 @@ class Buyer(db.Model):
         return len(self.transactions) > 1
     
     @property
+    def contact_email(self):
+        return self.updated_email if self.updated_email is not None else self.etsy_email
+    
+    @property
     def dict(self):
         return {
             'id': self.id,
@@ -25,7 +29,7 @@ class Buyer(db.Model):
             'updated_email': self.updated_email,
             'transactions': [t.dict for t in self.transactions],
             # Extra properties worth returning
-            'contact_email': self.updated_email if self.updated_email is not None else self.etsy_email
+            'contact_email': self.contact_email
         }
 
 
@@ -89,6 +93,7 @@ class Poster(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     image = db.Column(db.String(50), unique=False, nullable=True)
     # Status Booleans
+    email_sent = db.Column(db.Boolean, unique=False, nullable=False, default=False)
     responded = db.Column(db.Boolean, unique=False, nullable=False, default=False)
     approved = db.Column(db.Boolean, unique=False, nullable=False, default=False)
     made = db.Column(db.Boolean, unique=False, nullable=False, default=False)
