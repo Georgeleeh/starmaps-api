@@ -30,7 +30,7 @@ def add_transaction_and_others(etsy_transaction, E=Etsy()):
     t = Transaction(
         id = etsy_transaction['transaction_id'],
         timestamp = datetime.fromtimestamp(etsy_transaction['creation_tsz']),
-        sku = etsy_transaction['product_data']['sku'],
+        sku = etsy_transaction['product_data']['sku'] or 'STARMAP-D',
         receipt_id = etsy_transaction['receipt_id'],
         quantity = etsy_transaction['quantity'],
         shipped = etsy_transaction['shipped_tsz'] is not None,
@@ -44,6 +44,9 @@ def add_transaction_and_others(etsy_transaction, E=Etsy()):
             transaction_id=t.id
         )
         db.session.add(p)
+        db.session.commit()
+        db.session.refresh(p)
+        send_form_email(p, b.contact_email)
         t.posters.append(p)
 
     db.session.add(t)
@@ -51,7 +54,7 @@ def add_transaction_and_others(etsy_transaction, E=Etsy()):
     
     return t
 
-def sendemail(receiver_email, subject, text):
+def sendemail(receiver_email, subject, email_body):
     sender_email = os.environ['EMAIL_ADDRESS']
     password = os.environ['EMAIL_PASSWORD']
 
@@ -66,7 +69,7 @@ def sendemail(receiver_email, subject, text):
         message["From"] = sender_email
         message["To"] = receiver_email
 
-        message.attach(MIMEText(text, "plain"))
+        message.attach(MIMEText(email_body, "html"))
 
         server.sendmail(sender_email, receiver_email, message.as_string())
     except Exception as e:
@@ -74,6 +77,29 @@ def sendemail(receiver_email, subject, text):
         print(e)
     finally:
         server.quit()
+
+def send_form_email(poster, email='me@georgeleeh.com'):
+    url = os.environ['URL']
+    form_url = url + f'/form/{poster.id}'
+
+
+
+    email_body = f"""\
+            <html>
+                <body>
+                <p>Hi there, thank you for your order!<br><br>
+                    To complete your order and add your personalisation,<br>
+                    <b> please click the link below and fill in the form with your personalization information</b>.<br><br>
+                    <a href="{form_url}"> Please use this link to access your personalization Form</a><br><br>
+                All the best,<br>
+                George<br><br>
+                <a href="https://www.etsy.com/uk/shop/StarrySkyMaps">Starry Sky Maps on Etsy.com</a><br><br>
+                </p>
+                </body>
+            </html>
+            """
+
+    sendemail(email, 'Next Steps: Your StarrySkyMaps Order', email_body)
 
 def get_poster_size(transaction_id):
     t = Transaction.query.filter_by(id=transaction_id).first()
@@ -144,12 +170,19 @@ def all_buyers():
         bs = Buyer.query.all()
         return jsonify([b.dict for b in bs]), 200
 
-@app.route('/buyer/<buyer_id>', methods=['GET'])
+@app.route('/buyer/<buyer_id>', methods=['GET','PATCH'])
 def get_buyer(buyer_id):
     # Return specified Buyer as dict
     if request.method == 'GET':
         b = Buyer.query.filter_by(id=buyer_id).first()
         return jsonify(b.dict), 200
+    
+    if request.method == 'PATCH':
+        b = Buyer.query.filter_by(id=buyer_id).update(request.get_json())
+        b = Buyer.query.filter_by(id=buyer_id).first()
+        db.session.commit()
+        return request.get_json(), 200
+
 
 # ---------------------------------- TRANSACTION ---------------------------------- #
 
