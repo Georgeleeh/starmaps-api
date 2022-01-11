@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Starmap Maker</title>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/d3.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/d3.geo.projection.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/celestial.min.js') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/celestial.css') }}">
+</head>
+
+<body>
+  <div style="overflow:hidden;">
+    <div id="celestial-map"></div>
+  </div>
+  <div id="celestial-form"></div>
+
+  <script type="text/javascript">
+
+    Celestial.display({
+      disableAnimations: false,
+      form: true,
+      formFields: {
+        "general": false,
+        stars: false,
+        dsos: false,
+        lines: false,
+        other: false,
+        download: true
+      },
+      datapath: "{{ url_for('static', filename='data/') }}",
+      stars: { propername: true },
+      projection: "airy",
+
+      stars: {
+        show: true,    //Show stars
+        limit: 8,      //up to maximum stellar magnitude
+        colors: false,  //Show stars spectral colors, if not use "color"
+        names: false,   //Show star names
+        desig: false,   //Show designation (Bayer, Flamsteed, Variable star, Gliese, Draper, Hipparcos, whichever applies first)
+      },
+      constellations: {
+        show: false,    //Show constellations
+        names: false,   //Show constellation names
+        desig: false,   //Show short constellation names (3 letter designations)
+        lines: true,   //Show constellation lines
+      },
+
+      dsos: {
+        show: false    //Show Deep Space Objects
+      },
+
+      mw: {
+        show: false,    //Show Milky Way outlines
+      },
+
+      lines: {
+        graticule: {
+          show: false
+        },
+        equatorial: { show: false }, // Show equatorial plane
+        ecliptic: { show: false },   // Show ecliptic plane
+        galactic: { show: false },  // Show galactic plane
+        supergalactic: { show: false } // Show supergalactic plane
+      }
+
+    });
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Starmap Maker</title>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/d3.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/d3.geo.projection.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/celestial.min.js') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/celestial.css') }}">
+</head>
+
+<body>
+
+  <div id="celestial-map"></div>
+  <div id="celestial-form"></div>
+
+  <script type="text/javascript">
+
+    const d = new Date(
+      {{ date.year }},
+      {{ date.month - 1 }},
+      {{ date.day }},
+      {{ date.hour }},
+      {{ date.minute }},
+      0
+      );
+
+    const lat = {{ lat }};
+    const lon = {{ lon }};
+
+    var config = {
+      disableAnimations: true,
+      form: true,
+      formFields: {
+        "general": false,
+        stars: false,
+        dsos: false,
+        lines: false,
+        other: false,
+        download: true,
+        container: "map"
+      },
+      datapath: "{{ url_for('static', filename='data/') }}",
+      stars: { propername: true },
+      projection: "airy",
+      interactive: true,
+
+      stars: {
+        show: true,    //Show stars
+        limit: 8,      //up to maximum stellar magnitude
+        colors: false,  //Show stars spectral colors, if not use "color"
+        names: false,   //Show star names
+        desig: false,   //Show designation (Bayer, Flamsteed, Variable star, Gliese, Draper, Hipparcos, whichever applies first)
+      },
+      constellations: {
+        show: false,    //Show constellations
+        names: false,   //Show constellation names
+        desig: false,   //Show short constellation names (3 letter designations)
+        lines: true,   //Show constellation lines
+      },
+
+      dsos: {
+        show: false    //Show Deep Space Objects
+      },
+
+      mw: {
+        show: false,    //Show Milky Way outlines
+      },
+
+      lines: {
+        graticule: {
+          show: false
+        },
+        equatorial: { show: false }, // Show equatorial plane
+        ecliptic: { show: false },   // Show ecliptic plane
+        galactic: { show: false },  // Show galactic plane
+        supergalactic: { show: false } // Show supergalactic plane
+      }
+
+    };
+
+    Celestial.display(config);
+
+    Celestial.skyview({ date: d, location: [lat, lon] });
+
+  </script>
+</body>
+
+</html>

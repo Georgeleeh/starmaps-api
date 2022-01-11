@@ -106,6 +106,23 @@ def get_poster_size(transaction_id):
     return t.poster_scale
 
 
+# ---------------------------------- STARMAPS ---------------------------------- #
+
+@app.route('/starmap/viewer')
+def starmap_viewer():
+    return render_template('starmap_viewer.html')
+
+@app.route('/starmap/getter')
+def starmap_getter():
+    timestamp = request.args.get('timestamp') or datetime.now().timestamp()
+    date = datetime.fromtimestamp(int(timestamp))
+    lat = request.args.get('lat')
+    lat = float(lat)
+    lon =  request.args.get('lon')
+    lon = float(lon)
+    return render_template('starmap_getter.html', date=date, lat=lat, lon=lon)
+
+
 # ---------------------------------- FORMS ---------------------------------- #
 
 @app.route('/form/<poster_id>', methods=['GET', 'POST'])
