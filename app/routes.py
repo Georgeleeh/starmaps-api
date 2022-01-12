@@ -120,7 +120,9 @@ def starmap_getter():
     lat = float(lat)
     lon =  request.args.get('lon')
     lon = float(lon)
-    return render_template('starmap_getter.html', date=date, lat=lat, lon=lon)
+    colour =  request.args.get('colour')
+    colour = str(colour)
+    return render_template('starmap_getter.html', date=date, lat=lat, lon=lon, colour=colour)
 
 
 # ---------------------------------- FORMS ---------------------------------- #
