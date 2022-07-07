@@ -149,26 +149,44 @@ def starmap_form(poster_id):
     elif request.method == 'POST':
         button_value = request.form.get('button')
         if button_value == 'save':
+
+            r = Response.query.filter_by(poster_id=poster_id).first()
+
             response_datetime = str(request.form.get('map_date')) + ' ' + str(request.form.get('map_time'))
-            r = Response(
-                timestamp = datetime.now(),
-                # All Responses
-                map_datetime = datetime.strptime(response_datetime, "%Y-%m-%d %H:%M"),
-                map_written_datetime = request.form.get('map_written_datetime'),
-                message = request.form.get('message'),
-                map_written_address = request.form.get('map_written_location'),
-                size = request.form.get('image_scale') or get_poster_size(p.transaction_id),
-                latitude = request.form.get('lat'),
-                longitude = request.form.get('long'),
-                # Starmap Only
-                colour = request.form.get('colour_scheme'),
-                font = request.form.get('font'),
-                # Watercolour Only
-                show_conlines = request.form.get('show_conlines'),
-                map_background = request.form.get('map_background'),
-                # Relationships
-                poster_id = poster_id
-                )
+
+            if not r:
+                r = Response(
+                    timestamp = datetime.now(),
+                    # All Responses
+                    map_datetime = datetime.strptime(response_datetime, "%Y-%m-%d %H:%M"),
+                    map_written_datetime = request.form.get('map_written_datetime'),
+                    message = request.form.get('message'),
+                    map_written_address = request.form.get('map_written_location'),
+                    size = request.form.get('image_scale') or get_poster_size(p.transaction_id),
+                    latitude = request.form.get('lat'),
+                    longitude = request.form.get('long'),
+                    # Starmap Only
+                    colour = request.form.get('colour_scheme'),
+                    font = request.form.get('font'),
+                    # Watercolour Only
+                    show_conlines = request.form.get('show_conlines'),
+                    map_background = request.form.get('map_background'),
+                    # Relationships
+                    poster_id = poster_id
+                    )
+            else:
+                r.timestamp = datetime.now()
+                r.map_datetime = datetime.strptime(response_datetime, "%Y-%m-%d %H:%M")
+                r.map_written_datetime = request.form.get('map_written_datetime')
+                r.message = request.form.get('message')
+                r.map_written_address = request.form.get('map_written_location')
+                r.size = request.form.get('image_scale') or get_poster_size(p.transaction_id)
+                r.latitude = request.form.get('lat')
+                r.longitude = request.form.get('long')
+                r.colour = request.form.get('colour_scheme')
+                r.font = request.form.get('font')
+                r.show_conlines = request.form.get('show_conlines')
+                r.map_background = request.form.get('map_background')
 
             # Add Response to Poster and commit to db
             p.response = r
